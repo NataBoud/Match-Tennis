@@ -8,38 +8,42 @@ require_once ('MenuTemplate.php');
 
 class Menu extends MenuTemplate
 {
-    public function ajouterJoueur(): void
+
+    public function __construct()  {
+
+    }
+
+    public function ajouterJoueur($menu): void
     {
         Tournoi::ajouterJoueur();
-        count(Tournoi::listerJoueurs()) > 2 ? $this->afficherMenu() : null;
+        count(Tournoi::listerJoueurs()) > 2 ? self::afficherMenu($menu) : null;
     }
-    public function listerJoueurs(): void
+    public function listerJoueurs($menu): void
     {
         $joueurs = Tournoi::listerJoueurs();
         foreach ($joueurs as $index => $joueur) {
             echo YELLOW ."Joueur numéro " . ($index + 1) . ": " . $joueur->getNom() . " " . $joueur->getPrenom() . " (Classement: " . $joueur->getClassement() . ")" . RESET . PHP_EOL;
         }
-        $this->afficherMenu();
+        self::afficherMenu($menu);
     }
 
-    public function modifierJoueur(): void
+    public function modifierJoueur($menu): void
     {
         $index = (int)readline(GREEN . "Numéro du joueur à modifier : " . RESET);
         $joueur = Tournoi::getJoueur($index - 1);
         Tournoi::modifierJoueur($index - 1, $joueur);
-        $this->afficherMenu();
+        self::afficherMenu($menu);
     }
 
-    public function supprimerJoueur(): void
+    public function supprimerJoueur($menu): void
     {
         $index = (int)readline(GREEN . "Numéro du joueur à supprimer : ");
         Tournoi::supprimerJoueur($index - 1);
-        $this->afficherMenu();
+        self::afficherMenu($menu);
     }
 }
 
-$menu = new Menu();
-$menu->start();
+
 
 
 

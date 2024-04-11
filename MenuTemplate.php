@@ -1,12 +1,12 @@
 <?php
 
-
 require_once('./Joueur.php');
 require_once ('Tournoi.php');
 include "tools.php";
-class MenuTemplate
+abstract class MenuTemplate
 {
-    public function  menuTemplate($choices) : string
+
+    public static function  menuTemplate($choices) : string
     {
         do {
             foreach ($choices as $nb => $choice) {
@@ -27,41 +27,42 @@ class MenuTemplate
         return $userChoice;
     }
 
-    public function menu(): void
+    public static function menu(): void
     {
         echo YELLOW . "Menu :" . RESET . PHP_EOL;
         echo YELLOW . "1. Ajoutez au moins deux joueurs pour commencer le match" . RESET . PHP_EOL;
         echo RED . "2. Quitter" . RESET . PHP_EOL;
     }
 
-    public function afficherMenu() : void
+    public static function afficherMenu($menu) : void
     {
         $choice = readline(GREEN . "Afficher le menu ? (y/n) " . RESET );
         match (strtolower($choice)) {
-            "y" => $this->menuUtilisateur(),
+            "y" => self::menuUtilisateur($menu),
             "n" => exit(),
             default => RED ."Saisie invalide" . RESET . PHP_EOL
         };
     }
-    public function start(): void
+    public  function start($menu): void
     {
-
-        $this->menu();
+        self::menu();
         do {
+
             $choix = readline(YELLOW . "Choisissez une option : " . RESET );
             match ($choix) {
-                '1' => $this->ajouterJoueur(),
+                '1' => $menu->ajouterJoueur(),
                 '2' => exit(GREEN . "Fin du programme." . RESET . PHP_EOL),
                 default =>  RED . "Veuillez choisir une option valide." . RESET . PHP_EOL
             };
         } while (count(Tournoi::listerJoueurs()) < 2);
 
         echo YELLOW . "Vous pouvez commencer jouer !". RESET . PHP_EOL;
-        $this->menuUtilisateur();
+        self::menuUtilisateur($menu);
     }
 
-    public function menuUtilisateur(): void
+    public static function menuUtilisateur($menu): void
     {
+
         echo GREEN . "Menu :\n" . RESET;
         $mainMenuArray = array(
             1 =>  GREEN . "Ajouter un joueur\n",
@@ -72,12 +73,12 @@ class MenuTemplate
 //            6 =>  "Lister les matchs\n" . RESET,
             7 =>  RED . "Quitter\n" . RESET,
         );
-        $userChoice = $this->menuTemplate($mainMenuArray);
+        $userChoice = self::menuTemplate($mainMenuArray);
         match ($userChoice) {
-            '1' => $this->ajouterJoueur(),
-            '2' => $this->modifierJoueur(),
-            '3' => $this->supprimerJoueur(),
-            '4' => $this->listerJoueurs(),
+            '1' => $menu->ajouterJoueur(),
+            '2' => $menu->modifierJoueur(),
+            '3' => $menu->supprimerJoueur(),
+            '4' => $menu->listerJoueurs(),
 //            '5' => $this->creerMatch($tournoi),
 //            '6' => $this->listerMatchs($tournoi),
             '7' => exit("Fin du programme." . PHP_EOL),
@@ -86,4 +87,6 @@ class MenuTemplate
     }
 
 }
+
+
 

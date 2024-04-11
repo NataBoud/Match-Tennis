@@ -46,7 +46,7 @@ class Tournoi
     public static function supprimerJoueur(int $index) : string {
         if (isset(self::$joueurs[$index])) {
             unset(self::$joueurs[$index]);
-            return print(GREEN . "Le joueur avec le numéro" . ($index - 1) . "a bien été supprimé.\n" . RESET);
+            return print(GREEN . "Le joueur avec le numéro" . $index . "a bien été supprimé.\n" . RESET);
             } else {
             return print(RED . "L'utilisateur n'existe pas.\n" . RESET);
         }
